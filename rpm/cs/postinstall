@@ -1,0 +1,7 @@
+#!/bin/ksh
+# postinstall script
+#
+
+wlsdeployer install -f /usr/local/vtone/apps/web-apps/cal008.war
+
+exit $?

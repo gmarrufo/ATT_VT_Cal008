@@ -1,0 +1,11 @@
+#ident  "cal008"
+
+PKG=TAcal008
+NAME="WEVS: Application - cal008"
+ARCH=sparc
+VERSION=1.0
+MAXINST=1
+CATEGORY=application,wevsapp,cal008,as
+DESC="cal008 - This includes audio files for the package."
+CLASSES=none fsu
+BASEDIR=/usr/local/www/

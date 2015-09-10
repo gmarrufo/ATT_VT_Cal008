@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.1">
+<!--	============================											
+    Filename: cal008_root.vxml
+    Description: cal008 root doc                   
+    09/02/15 - Initial Version     
+=============================   -->
+
+    <property name="loglevel" value="3"/>
+    <meta name="application" content="cal008"/>
+	<property name="TTSENGINE" value="NATURALVOICES_JUNOT"/>
+
+	<!-- In development, set METRICSLEVEL to 5.  In production, set it to 3 -->
+    <property name="METRICSLEVEL" value="3"/>  
+    <property name="fetchtimeout" value="30s"/>
+
+	<!-- In development, set cache documentmaxage to 1s.  In production, set it to 1 day -->
+    <!--
+	<property name="documentmaxage" value="1s"/>
+    -->	    
+    <property name="documentmaxage" value="86400s"/>	
+    <property name="documentmaxstale" value="86400s"/>
+    <property name="documentfetchint" value="safe"/>
+    <property name="grammarmaxage" value="86400s"/>
+    <property name="grammarmaxstale" value="86400s"/>
+    <property name="grammarfetchint" value="safe"/>
+    <property name="scriptfetchint" value="safe"/>
+    <property name="audiofetchint" value="safe"/>
+
+   	<!-- All phrases are FSUs and therefore the following values for audiomaxage and audiomaxstale -->
+    <property name="audiomaxage" value="900s"/>
+    <property name="audiomaxstale" value="900s"/>
+	
+	<!-- In development, set scriptmaxage to 1s.  In production, set it to 1 day -->
+    <!--	
+	<property name="scriptmaxage" value="1s"/>
+    -->	
+    <property name="scriptmaxage" value="86400s"/>	
+    <property name="scriptmaxstale" value="86400s"/>
+
+    <!--  Grammar DTMF, ASR property -->
+	<property name="inputmodes" value="dtmf"/>
+	<property name="bargein" value="true"/>
+    <property name="timeout" value="6s"/>
+	<property name="interdigittimeout" value="4s"/>    
+	<property name="TERMTIMEOUT" value="1s"/>    	
+    <property name="termchar" value="#"/>
+ 
+    <!--  Application vars for error -->
+    <var name="appid" expr="'cal008'"/>
+    <var name="APPID" expr="appid.toUpperCase()"/>
+    <var name="g_errLoopCounter" expr="0"/>
+    <var name="g_bDisconnected" expr="false"/>
+    <var name="g_rootFetched" expr="true"/>
+    <var name="g_AlarmReturnVxmlPage" expr="''"/>
+
+    <!--  Getting unique session id  -->
+    <var name="vg_sessionId" expr="session.com.voicegenie.telephone.primarychan"/>  
+    <var name="callId" expr="vg_sessionId"/>
+
+    <!--  ***** Platform related  Functions *****  -->
+    <script src="/PlatLib/platenv.js"/>
+    <script src="/PlatformCDH/cdh.js"/>
+
+   	<!-- ***** Alarm Globals *****   -->
+    <var name="alarmid" expr="'cal008_ERROR'"/>
+	<var name="errorMessage" expr="'An error event has occurred, call ID ' + callId"/>
+    <var name="sevLevel" expr="'MAJOR'"/>
+
+   	<!-- ***** Billing Globals *****   -->
+    <script src="/PlatformCDH/cdh.js"/>
+    <var name="cdh_START_TIME" expr="getCDHTime()"/>
+	<var name="cdh_END_TIME" expr="''"/>
+    <var name="cdh_RECORD_TYPE" expr="'1'"/>
+    <var name="cdh_CALL_ID" expr="callId"/>
+    <var name="cdh_ANI" expr="session.telephone.ani?session.telephone.ani:'0000000000'"/>
+    <var name="cdh_DNIS" expr="session.telephone.dnis?session.telephone.dnis:'0000000000'"/>
+    <var name="cdh_APPL_ID" expr="appid"/>
+    <var name="cdh_REPORT"/>
+    <var name="cdh_REPORT1" />
+    <var name="cdh_REPORT2"/>
+    <var name="g_APPL_ROOT_DOC" expr="'/cal008/vxml/cal008_root.vxml'"/>
+    <var name="g_RECORD_TYPE" />
+    <var name="g_START_TIME" />
+    <var name="g_END_TIME" />
+    <var name="cdh_BILLING_DROPPED"  expr = "false"/>
+ 
+	<var name="transactionID" expr="'A'"/>
+	<var name="STS_1" expr="getCDHTime()"/>
+	<var name="ETS_1"/>
+	<var name="STS_A" expr="getCDHTime()"/>
+	<var name="ETS_A"/>
+	<var name="STS_B"/>
+	<var name="ETS_B"/>
+ 
+    <!-- ***** audio, grammar, standard audio dir Globals *****   -->    	
+    <var name="HTTP_AUDIO_PREFIX" expr="'http://' + getAudioHost(appid)"/>
+    <var name="app_audio_path" expr="HTTP_AUDIO_PREFIX + '/audio/cal008/english/'"/>
+    <var name="standardAudioPath" expr="HTTP_AUDIO_PREFIX + '/audio/standard/'"/>
+	<var name="speakCommonAudioPath" expr="standardAudioPath+'junot_expanded/'"/>
+
+    <var name="LANGUAGE" expr="'english'"/>
+
+   	<!-- ***** End  audio ,grammar ,standard audio dir Globals *****   -->
+
+    <!-- ***** dbAccess Query Node Globals *****   -->
+    <var name="queryString" expr="''"/>
+    <var name="maxRecords" expr="'0'"/>
+    <var name="outputType" expr="'VXML'"/>
+    <var name="approotdocname" expr="g_APPL_ROOT_DOC"/>
+
+   	<!-- ***** APPLICATION GLOBAL ***** -->
+    <script src="../js/cal008.js"/>
+	<script src="../js/ChiScan.js"/>    
+ 	<script src="../js/cal008_reports.js"/>
+   
+    <!-- For Reports -->
+    <var name = "g_marker" expr="''"/>
+    <var name = "g_markerString" expr = "''"/>    
+    <var name = "g_terminationType" expr="''"/>     <!-- value : c - caller disconnect, a - application disconnect, t - transfer -->
+
+	<!-- For ChiScan -->
+   	<!-- assign EndCall ,if app is disconnecting -->
+    <var name = "CHI_Disposition"  expr = "'Hangup'"/>
+    <var name = "CHI_exit_type" expr = "'E700'" />
+    <var name = "CHI_transaction_status" expr = "''" />
+    <var name = "CHI_destination_name" expr = "''" />
+    <var name = "APP_NAME"  expr = "'CAL008 - California Department of Public Health – Women, Infants and Children'"/>
+    <var name = "DATE_LAST_MODIFIED"  expr = "'20151002'"/>
+    <var name = "APP_VERSION"  expr = "'1.0'"/>
+    <var name = "g_immedHU"  expr = "1"/>
+	<var name = "vxmlFileName" expr="'cal008_root.vxml'" />
+	<var name = "formName" expr="''"/>
+
+    <!-- Global Constant -->
+    <var name="MAX_REPT" expr="2"/>
+    <var name="MAX_MAIN" expr="10"/>
+    <var name="MAX_ZIP" expr="5"/>
+    <var name="MAX_REPEAT" expr="5"/>
+    <var name="MAX_FOOD" expr="10"/>
+      
+    <!-- Global Variables -->
+    <var name="G_main" expr="0"/>
+    <var name="G_zip" expr="0"/>
+    <var name="G_getZip" expr="0"/>
+    <var name="G_loclist" expr="0"/>
+    <var name="G_food" expr="0"/>
+    
+    <var name = "Locator" expr = "'Y'" />
+                   
+   	<!-- ***** END Application Globals *****  -->
+
+   	<!--  ***** App Functions *****  -->
+    <catch event="error">
+        <assign name="CHI_exit_type" expr="'E997'"/>
+        <assign name="g_errLoopCounter" expr="g_errLoopCounter + 1"/>
+        <log level="0">VOICETONESTDLOG.
+            <value expr="appid"/>.
+            <value expr="appid"/>_root.error:event=
+            <value expr="_event"/>,message=
+            <value expr="_message"/>,DNIS=
+            <value expr="cdh_DNIS"/>,ANI=
+            <value expr="cdh_ANI"/>, g_errLoopCounter=
+            <value expr="g_errLoopCounter"/>
+        </log>
+        <if cond="g_errLoopCounter > 1">
+            <if cond="false == g_bDisconnected">
+                <goto next="cal008_root.vxml#ErrTransfer"/>
+                <else/>
+                <goto next="cal008_dropCDH.vxml"/>
+            </if>
+        </if>
+
+        <if cond="-1 != _event.search(/ASR/gi)">
+            <assign name="application.alarmid" expr="APPID + '_017'"/>
+            <assign name="application.sevLevel" expr="'MAJOR'"/>
+            <assign name="application.errorEvent" expr="'ASR ERROR'"/>
+            <elseif cond="-1 != _event.search(/TTS/gi)"/>
+            <assign name="application.alarmid" expr="APPID + '_018'"/>
+            <assign name="application.sevLevel" expr="'MAJOR'"/>
+            <assign name="application.errorEvent" expr="'TTS ERROR'"/>
+            <elseif cond="-1 != _event.search(/BADFETCH/gi)"/>
+            <assign name="application.alarmid" expr="APPID + '_019'"/>
+            <assign name="application.sevLevel" expr="'MAJOR'"/>
+            <assign name="application.errorEvent" expr="'BADFETCH ERROR'"/>
+            <else/>
+            <assign name="application.alarmid" expr="APPID + '_020'"/>
+            <assign name="application.sevLevel" expr="'MAJOR'"/>
+            <assign name="application.errorEvent" expr="_event"/>
+        </if>
+        <assign name="application.errorMessage" expr="application.appid + '_root.error:' + application.errorEvent + ':Message=' + _event + ':' + _message"/>
+        <if cond="g_bDisconnected == true">
+            <assign name="g_AlarmReturnVxmlPage" expr="'DISCONNECT'"/>
+            <if cond=" g_terminationType == ''">
+                <assign name="g_terminationType" expr="'a'"/>
+            </if>
+            <else/>
+            <assign name="g_AlarmReturnVxmlPage" expr="'cal008_transfer.vxml'"/>
+        </if>
+        <goto next="cal008_AlarmSD.vxml"/>
+    </catch>
+       	<!-- ******************************************************************************** -->
+    <catch event="telephone.disconnect.hangup connection.disconnect.hangup">
+        <assign name="g_bDisconnected" expr="true"/>
+        <log> current g_terminationType:
+            <value expr="g_terminationType"/>
+        </log>
+        <var name="msg" expr="_message"/>
+		
+        <if cond="g_immedHU == 1">
+            <assign name="CHI_exit_type" expr="'E700'"/>
+            <else/>
+            <if cond="ISNULL(CHI_exit_type)">
+                <assign name="CHI_exit_type" expr="'E800'"/>
+            </if>
+        </if>
+        <if cond="( msg.indexOf('HANGUP') >= 0 )">
+            <assign name="g_terminationType" expr="'c'"/>
+            <else/>
+            <assign name="g_terminationType" expr="'a'"/>
+        </if>
+        <log>
+            <value expr="appid"/>__root.event.hangup:HANGUP:event=
+            <value expr="_event"/>,Message:
+            <value expr="_message"/>, g_markerString=
+            <value expr="g_markerString"/>, g_terminationType:
+            <value expr="g_terminationType"/>
+        </log>
+   		
+        <goto next="cal008_dropCDH.vxml"/>
+    </catch>
+       	<!-- ******************************************************************************** -->
+    <catch event="telephone.disconnect.transfer connection.disconnect.transfer">
+        <assign name="g_bDisconnected" expr="true"/>
+        <assign name="g_terminationType" expr="'t'"/>
+        <log>
+            <value expr="appid"/>.
+            <value expr="appid"/>_root.event.transfer:
+            <value expr="_event"/> caught:g_markerString=
+            <value expr="g_markerString"/>
+        </log>
+   		
+        <goto next="cal008_dropCDH.vxml"/>
+    </catch>
+
+   	<!-- **************
+   	*   ErrTransfer form
+   	*
+   	********************-->
+    <form id="ErrTransfer">
+        <var name="transferNum" expr="'tel:' + g_defaultXferNumber"/>
+        <block>
+            <if cond=" g_terminationType == ''">
+                <assign name="g_terminationType" expr="'t'"/>
+            </if>
+            <log>
+                <value expr="appid"/>_root.ErrTransfer:transferNum=
+                <value expr="transferNum"/>
+            </log>
+        </block>
+        <transfer name="TransferCall" destexpr="transferNum" bridge="false" connecttimeout="30s">
+            <catch event="error">
+                <assign name="CHI_exit_type" expr="'E997'"/>
+                <var name="alarmMessage" expr="''"/>
+                <assign name="alarmMessage" expr="'Error=ERROR WHILE TRANSFERRING TO:' +  transferNum + ':Message=' + _event + ':' + _message + ':Phoneweb=' + getPWServerName() + ':vg_SessionId=' + application.gs_sessionId"/>
+                <script><![CDATA[
+                          		 	alarmMessage = "/PlatServlets/GenAlarm?appid=" + appid + "&sevLevel=MINOR&outputType=wave&errorMessage=" + escape(alarmMessage) + "&alarmid=" + APPID + "_021";
+                   		]]>
+                </script>
+                <audio expr="alarmMessage"> </audio>
+                <log level="0">VOICETONESTDLOG.
+                    <value expr="appid"/>.
+                    <value expr="appid"/>_root.TransferCall:ERROR WHILE TRANSFERRING TO:
+                    <value expr="transferNum"/>, alarmText=
+                    <value expr="alarmText"/>
+                </log>
+                <log dest="bill">transfererr</log>
+                <if cond=" g_terminationType == ''">
+                    <assign name="g_terminationType" expr="'a'"/>
+                </if>
+                <disconnect/>
+            </catch>
+        </transfer>
+        <catch event="error">
+            <assign name="CHI_exit_type" expr="'E997'"/>
+            <log level="0">VOICETONESTDLOG.
+                <value expr="appid"/>.
+                <value expr="appid"/>_root.ErrTransfer. Caught another error. Disconnecting the Call.
+            </log>
+            <if cond=" g_terminationType == ''">
+                <assign name="g_terminationType" expr="'a'"/>
+            </if>
+            <disconnect/>
+        </catch>
+    </form>
+</vxml>

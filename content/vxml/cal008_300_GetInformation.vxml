@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="cal008_root.vxml">
+
+<!-- ============================
+	 Filename: cal008_300_GetInformation.vxml
+	 Description: Unit300 - GetInformation. Select responses.
+	 09/09/15 - Initial Version
+ ============================= -->
+
+	<var name="repromptCount" expr="0" />
+	<var name="_err" expr="0" />
+	<var name="_repeat" expr="0" />
+
+	<form id="EntryLogging" cleardtmf="true">
+		<block>
+			<assign name="vxmlFileName" expr="'cal008_300_GetInformation.vxml'" />
+			<assign name="formName" expr="'EntryLogging'" />
+			<assign name="g_marker" expr="'M300-00'" />
+			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+			<prompt>
+				<audio fetchhint="prefetch" expr="app_audio_path + '5300.wav'">
+					<voice name="jan">WIC Services. WIC is a nutrition and health education program that helps pregnant women, mothers with infants, and children under age 5 to eat well, be active and stay healthy. While you are on WIC, you receive special checks to buy healthy foods such as cereal, eggs, and fruits and vegetables at any WIC authorized grocery store. At WIC, you also learn tips for healthy eating and active living and new ways to prepare healthy foods for your children. You also get support with breast feeding, finding a doctor, or referrals to other community services you might want. You and your child may be eligible for WIC if, you have a low to medium income, you live in California, have a child or children under age 5, and are pregnant, breast feeding, or just had a baby. Children cared for by a grandparent, father, foster parent or other guardians may also be eligible. Many working families qualify for WIC. Migrant families are also welcome to apply. Visit our website at www.WICworks.ca.gov, that's w-w-w dot wicworks.dot c-a-dot g-o-v to find out more about WIC and see if you qualify.</voice>
+				</audio>
+			</prompt>
+			<goto next="#SelectResponse" />
+		</block>
+	</form>
+	<form id="SelectResponse" cleardtmf="true">
+		<block>
+			<assign name="formName" expr="'SelectResponse'" />
+		</block>
+		<field name="Response_field" slot="answer">
+			<grammar type="application/x-abnf" mode="dtmf">1|2|9</grammar>
+			<prompt cond="_repeat &gt;= L_REPEAT && G_main &gt;= L_MAIN && G_zip &gt;= L_ZIP">
+				<assign name="CHI_exit_type" expr="'E30040'" />
+				<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
+				<assign name="g_marker" expr="'M300-40'" />
+				<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+				<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+				<audio fetchhint="prefetch" expr="app_audio_path + '5017.wav'">
+					<voice name="jan">Thank you for calling WIC. Goodbye.</voice>
+				</audio>
+				<disconnect />
+			</prompt>
+			<prompt cond="G_zip &lt; L_ZIP && Locator == 'Y'">
+				<audio fetchhint="prefetch" expr="app_audio_path + '5301.wav'">
+					<voice name="jan">To find the office location closest to your home, press 1.</voice>
+				</audio>
+			</prompt>
+			<prompt cond="_repeat &lt; L_REPEAT">
+				<audio fetchhint="prefetch" expr="app_audio_path + '5302.wav'">
+					<voice name="jan">To repeat this message, press 2.</voice>
+				</audio>
+			</prompt>
+			<prompt cond="G_main &lt; L_MAIN">
+				<audio fetchhint="prefetch" expr="app_audio_path + '5012.wav'">
+					<voice name="jan">To return to the Main Menu, press 9.</voice>
+				</audio>
+			</prompt>
+			<catch event="noinput nomatch">
+				<assign name="repromptCount" expr="repromptCount + 1" />
+				<if cond="repromptCount &lt;= MAX_REPT">
+					<prompt>
+						<audio fetchhint="prefetch" expr="app_audio_path + '5010.wav'">
+							<voice name="jan">I am sorry.</voice>
+						</audio>
+					</prompt>
+					<clear namelist="Response_field" />
+					<reprompt />
+				<else />
+					<assign name="CHI_exit_type" expr="'E30061'" />
+					<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
+					<assign name="g_marker" expr="'M300-61'" />
+					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+					<audio fetchhint="prefetch" expr="app_audio_path + '5017.wav'">
+						<voice name="jan">Thank you for calling WIC. Goodbye.</voice>
+					</audio>
+					<disconnect />					
+				</if>
+			</catch>
+			<filled>
+				<var name="collectedResponse" expr="Response_field" />
+				<if cond="collectedResponse == '1'">
+					<if cond="G_zip &lt; L_ZIP && Locator == 'Y'">
+						<assign name="g_marker" expr="'M300-01'" />
+						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="G_zip" expr="G_zip + 1" />
+						<goto next="cal008_200_OfficeLocation.vxml" />
+					<else />
+						<clear namelist="Response_field" />
+						<throw event="nomatch" />
+					</if>
+				<elseif cond="collectedResponse == '2'" />
+					<if cond="_repeat &lt; L_REPEAT">
+						<assign name="g_marker" expr="'M300-02'" />
+						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="_repeat" expr="_repeat + 1" />
+						<clear namelist="Response_field" />
+						<reprompt />
+					<else />
+						<clear namelist="Response_field" />
+						<throw event="nomatch" />
+					</if>
+				<elseif cond="collectedResponse == '9'" />
+					<if cond="G_main &lt; L_MAIN">
+						<assign name="g_marker" expr="'M300-09'" />
+						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="G_main" expr="G_main + 1" />
+						<goto next="cal008_110_MainMenu.vxml" />
+					<else />
+						<clear namelist="Response_field" />
+						<throw event="nomatch" />
+					</if>
+				<else />
+					<clear namelist="Response_field" />
+					<throw event="nomatch" />
+				</if>
+			</filled>
+		</field>
+	</form>
+</vxml>

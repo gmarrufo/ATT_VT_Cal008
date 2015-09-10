@@ -1,0 +1,19 @@
+# PKGINST parameter provided by installation service
+# i.fsu 
+
+NEWFILES=false
+echo "Conditionally installing FSU files"
+while read src dest
+do
+if [ ! -f $dest  ]
+then
+  NEWFILES=true
+  installf -c fsu $PKGINST $dest f 0755 wevs wevs || exit 2
+  cp $src $dest
+fi
+done
+if [ $NEWFILES -eq "true" ]
+then
+    installf -f $PKGINST || exit 2
+fi
+exit 0

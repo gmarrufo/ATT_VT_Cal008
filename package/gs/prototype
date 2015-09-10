@@ -1,0 +1,32 @@
+i pkginfo
+i i.fsu
+
+# FSU
+
+d none /usr/local/www/audio/cal008 0755 wevs wevs
+d none /usr/local/www/audio/cal008/english 0755 wevs wevs
+d none /usr/local/www/audio/cal008/spanish 0755 wevs wevs
+d none /usr/local/www/audio/cal008/vietnamese 0755 wevs wevs
+d none /usr/local/www/audio/cal008/cantonese 0755 wevs wevs
+d none /usr/local/www/audio/cal008/hmong 0755 wevs wevs
+
+# Reports 
+
+#d none /export/wevs/wevs-1.0/sol8-sparc/apps/cal008 0755 wevs wevs
+#d none /export/wevs/wevs-1.0/sol8-sparc/apps/cal008/report 0755 root bin
+
+#English FSU Phrases 
+#f fsu /usr/local/www/audio/cal008/english/5000.wav=../../audio/english/5000.wav 0644 wevs wevs
+
+#Spanish FSU Phrases
+#f fsu /usr/local/www/audio/cal008/spanish/5000.wav=../../audio/spanish/5000.wav 0644 wevs wevs
+
+#Vietnamese FSU Phrases
+#f fsu /usr/local/www/audio/cal008/vietnamese/5000.wav=../../audio/vietnamese/5000.wav 0644 wevs wevs
+
+#Cantonese FSU Phrases
+#f fsu /usr/local/www/audio/cal008/cantonese/5000.wav=../../audio/cantonese/5000.wav 0644 wevs wevs
+
+#Hmong FSU Phrases
+#f fsu /usr/local/www/audio/cal008/hmong/5000.wav=../../audio/hmong/5000.wav 0644 wevs wevs
+

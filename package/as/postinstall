@@ -1,0 +1,15 @@
+#For FSU
+APPID="cal008"
+FILENAME="/usr/local/wevs/fwsync/fwsync_appids.conf"
+
+if [ ! -f $FILENAME ]
+then
+        echo "$APPID">> $FILENAME
+        exit
+else
+    sed -e "/$APPID/d" $FILENAME >> /tmp/$$fwsync_appids.conf
+    echo $APPID >> /tmp/$$fwsync_appids.conf
+    sort -u /tmp/$$fwsync_appids.conf > $FILENAME
+    rm -f /tmp/$$fwsync_appids.conf
+fi
+

@@ -1,0 +1,22 @@
+#*****************************************************************************
+#**                    COPYRIGHT (c) 2006, AT&T Knowledge Ventures.
+#**                    All Rights Reserved
+#*****************************************************************************
+#
+#*      THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T.
+#*      The copyright notice above does not evidence any actual
+#*      or intended publication of such source code.
+#*
+#*****************************************************************************
+#ident "@(#)@(#) pkginfo 221.1.2.2 12/22/05 12:51:12@(#)"
+
+PKG=TGcal008
+APPID=cal008
+NAME="WEVS: FSU provisioning - cal008"
+ARCH=sparc
+VERSION=1.0.0
+MAXINST=1
+CATEGORY=application,wevsapp,gs,cal008
+DESC="cal008 Gateway FSU provisioning package"
+CLASSES=none fsu
+BASEDIR=/
