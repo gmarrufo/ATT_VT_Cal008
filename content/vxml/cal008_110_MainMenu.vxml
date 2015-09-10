@@ -64,7 +64,7 @@
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 					<prompt bargein="false">
 						<audio fetchhint="prefetch" expr="app_audio_path + '5011.wav'">
-							<voice name="jan">I’m sorry. I am having trouble helping you. Thank you for calling WIC. Good bye.</voice>
+							<voice name="jan">I am sorry. I am having trouble helping you. Thank you for calling WIC. Good bye.</voice>
 						</audio>
 					</prompt>
 					<disconnect />
@@ -86,7 +86,7 @@
 					<assign name="g_marker" expr="'M110-02'" />
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
-					<goto next="cal008_300_GetInformation.vxml" />
+					<goto next="cal008_300_GeneralInfo.vxml" />
 				<elseif cond="collectedResponse == '3'" />
 					<assign name="g_marker" expr="'M110-03'" />
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />

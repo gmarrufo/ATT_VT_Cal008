@@ -37,7 +37,7 @@
 					<voice name="jan">If you know your 5 digit ZIP Code, press 1. If you do not know the ZIP Code, press 2.</voice>
 				</audio>
 			</prompt>
-			<prompt cond="G_main &lt; L_MAIN">
+			<prompt cond="G_main &lt; MAX_MAIN">
 				<audio fetchhint="prefetch" expr="app_audio_path + '5012.wav'">
 					<voice name="jan">To return to the Main Menu, press 9.</voice>
 				</audio>
@@ -72,7 +72,7 @@
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 					<goto next="cal008_250_PlayNoZip.vxml" />
 				<elseif cond="collectedResponse == '9'" />
-					<if cond="G_main &lt; L_MAIN">
+					<if cond="G_main &lt; MAX_MAIN">
 						<assign name="g_marker" expr="'M200-09'" />
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>

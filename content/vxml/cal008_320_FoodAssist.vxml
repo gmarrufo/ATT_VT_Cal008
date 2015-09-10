@@ -8,7 +8,6 @@
  ============================= -->
 
 	<var name="repromptCount" expr="0" />
-	<var name="_err" expr="0" />
 
 	<form id="EntryLogging" cleardtmf="true">
 		<block>
@@ -18,11 +17,6 @@
 			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 			<log level="0" expr="moduleStart('MS-FoodAssist')" />
-			<prompt>
-				<audio fetchhint="prefetch" expr="app_audio_path + '5320.wav'">
-					<voice name="jan">Food Assistance Program Menu. Please make your selection from the following 3 choices. For Cal Fresh (formerly called Food Stamps), press 1. For California Association of Food Banks, press 2. For Emergency Food Assistance, press 3</voice>
-				</audio>
-			</prompt>
 			<goto next="#SelectResponse" />
 		</block>
 	</form>
@@ -32,7 +26,12 @@
 		</block>
 		<field name="Response_field" slot="answer">
 			<grammar type="application/x-abnf" mode="dtmf">1|2|3|9</grammar>
-			<prompt cond="G_main &lt; L_MAIN">
+			<prompt>
+				<audio fetchhint="prefetch" expr="app_audio_path + '5320.wav'">
+					<voice name="jan">Food Assistance Program Menu. Please make your selection from the following 3 choices. For Cal Fresh (formerly called Food Stamps), press 1. For California Association of Food Banks, press 2. For Emergency Food Assistance, press 3</voice>
+				</audio>
+			</prompt>			
+			<prompt cond="G_main &lt; MAX_MAIN">
 				<audio fetchhint="prefetch" expr="app_audio_path + '5012.wav'">
 					<voice name="jan">To return to the Main Menu, press 9.</voice>
 				</audio>
@@ -55,7 +54,7 @@
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 					<prompt bargein="false">
 						<audio fetchhint="prefetch" expr="app_audio_path + '5011.wav'">
-							<voice name="jan">I’m sorry. I am having trouble helping you. Thank you for calling WIC. Good bye.</voice>
+							<voice name="jan">I am sorry. I am having trouble helping you. Thank you for calling WIC. Good bye.</voice>
 						</audio>
 					</prompt>
 					<disconnect />
@@ -67,7 +66,7 @@
 					<assign name="g_marker" expr="'M320-01'" />
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
-					<goto next="cal008_330_CallFresh.vxml" />
+					<goto next="cal008_330_CalFresh.vxml" />
 				<elseif cond="collectedResponse == '2'" />
 					<assign name="g_marker" expr="'M320-02'" />
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
@@ -79,7 +78,7 @@
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 					<goto next="cal008_350_EMFoodAssist.vxml" />
 				<elseif cond="collectedResponse == '9'" />
-					<if cond="G_main &lt; L_MAIN">
+					<if cond="G_main &lt; MAX_MAIN">
 						<assign name="g_marker" expr="'M320-09'" />
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
