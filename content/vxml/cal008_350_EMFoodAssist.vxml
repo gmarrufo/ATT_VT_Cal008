@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="cal008_root.vxml">
+
+<!-- ============================
+	 Filename: cal008_350_EMFoodAssist.vxml
+	 Description: Unit350 - EMFoodAssist. Select responses.
+	 09/10/15 - Initial Version
+ ============================= -->
+
+	<var name="repromptCount" expr="0" />
+	<var name="_repeat" expr="0" />
+
+	<form id="EntryLogging" cleardtmf="true">
+		<block>
+			<assign name="vxmlFileName" expr="'cal008_350_EMFoodAssist.vxml'" />
+			<assign name="formName" expr="'EntryLogging'" />
+			<assign name="CHI_exit_type" expr="'E35000'" />
+			<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>			
+			<assign name="g_marker" expr="'M350-00'" />
+			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+			<goto next="#Part_A" />
+		</block>
+	</form>
+	<form id="Part_A" cleardtmf="true">
+		<block>		
+			<assign name="formName" expr="'Part_A'" />			
+			<prompt>
+				<audio fetchhint="prefetch" expr="app_audio_path + '5350.wav'">
+					<voice name="jan">Emergency Food Assistance. The Emergency Food Assistance Program provides United States Department of Agriculture (USDA) foods to a network of food banks for distribution to eligible individuals and households within their service area. Eligibility is based on the applicant's residency and household income. For more information, please call (916) 229-3344 or visit http://www.dss.cahwnet.gov/efap/. That is w-w-w dot d-s-s dot c-a-h-w-n-e-t dot g-o-v slash e-f-a-p slash</voice>
+				</audio>
+			</prompt>
+			<if cond="_repeat &gt;= MAX_REPEAT &amp;&amp; G_food &gt;= MAX_FOOD">
+				<assign name="CHI_exit_type" expr="'E35040'" />
+				<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
+				<assign name="g_marker" expr="'M350-40'" />
+				<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+				<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+				<prompt>
+					<audio fetchhint="prefetch" expr="app_audio_path + '5017.wav'">
+						<voice name="jan">Thank you for calling WIC. Goodbye.</voice>
+					</audio>
+				</prompt>
+				<disconnect />					
+			<else />
+				<goto next="#SelectResponse" />
+			</if>
+		</block>
+	</form>
+	<form id="SelectResponse" cleardtmf="true">
+		<block>
+			<assign name="formName" expr="'SelectResponse'" />
+		</block>
+		<field name="Response_field" slot="answer">
+			<grammar type="application/x-abnf" mode="dtmf">1|2</grammar>	
+			<prompt cond="_repeat &lt; MAX_REPEAT">
+				<audio fetchhint="prefetch" expr="app_audio_path + '5331.wav'">
+					<voice name="jan">To repeat this message, press 1.</voice>
+				</audio>
+			</prompt>
+			<prompt cond="G_food &lt; MAX_FOOD">
+				<audio fetchhint="prefetch" expr="app_audio_path + '5332.wav'">
+					<voice name="jan">To return to the Food Assistant Program Menu, press 2.</voice>
+				</audio>
+			</prompt>
+			<catch event="noinput nomatch">
+				<assign name="repromptCount" expr="repromptCount + 1" />
+				<if cond="repromptCount &lt;= MAX_REPT">
+					<prompt>
+						<audio fetchhint="prefetch" expr="app_audio_path + '5010.wav'">
+							<voice name="jan">I am sorry.</voice>
+						</audio>
+					</prompt>
+					<clear namelist="Response_field" />
+					<reprompt />
+				<else />
+					<assign name="CHI_exit_type" expr="'E35061'" />
+					<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
+					<assign name="g_marker" expr="'M350-61'" />
+					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+					<prompt>
+						<audio fetchhint="prefetch" expr="app_audio_path + '5017.wav'">
+							<voice name="jan">Thank you for calling WIC. Goodbye.</voice>
+						</audio>
+					</prompt>
+					<disconnect />					
+				</if>
+			</catch>
+			<filled>
+				<var name="collectedResponse" expr="Response_field" />
+				<if cond="collectedResponse == '1'">
+					<if cond="_repeat &lt; MAX_REPEAT">
+						<assign name="g_marker" expr="'M350-01'" />
+						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="_repeat" expr="_repeat + 1" />
+						<goto next="#Part_A" />
+					<else />
+						<clear namelist="Response_field" />
+						<throw event="nomatch" />
+					</if>			
+				<elseif cond="collectedResponse == '2'" />
+					<if cond="G_food &lt; MAX_FOOD">
+						<assign name="g_marker" expr="'M350-02'" />
+						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="G_food" expr="G_food + 1" />
+						<goto next="cal008_320_FoodAssist.vxml" />
+					<else />
+						<clear namelist="Response_field" />
+						<throw event="nomatch" />
+					</if>
+				<else />
+					<clear namelist="Response_field" />
+					<throw event="nomatch" />
+				</if>
+			</filled>
+		</field>
+	</form>
+</vxml>

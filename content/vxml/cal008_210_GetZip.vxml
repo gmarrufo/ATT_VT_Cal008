@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="cal008_root.vxml">
+
+<!-- ============================
+	 Filename: cal008_210_GetZip.vxml
+	 Description: Unit210 - GetZip. Select responses.
+	 09/10/15 - Initial Version
+ ============================= -->
+
+	<var name="repromptCount" expr="0" />
+
+	<form id="EntryLogging" cleardtmf="true">
+		<block>
+			<assign name="vxmlFileName" expr="'cal008_210_GetZip.vxml'" />
+			<assign name="formName" expr="'EntryLogging'" />
+			<assign name="g_marker" expr="'M210-00'" />
+			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+			<goto next="#SelectResponse" />
+		</block>
+	</form>
+	<form id="SelectResponse" cleardtmf="true">
+		<block>
+			<assign name="formName" expr="'SelectResponse'" />
+		</block>
+		<field name="Response_field" type="digits?length=5" slot="answer">
+			<grammar type="application/x-abnf" mode="dtmf">
+				<rule id="keypress" scope = "public">
+			      <one-of>
+			          <item> 1 </item>
+			          <item> 2 </item>
+			          <item> 3 </item>
+			          <item> 4 </item>
+			          <item> 5 </item>
+			          <item> 6 </item>
+			          <item> 7 </item>
+			          <item> 8 </item>
+			          <item> 9 </item>
+			          <item> 0 </item>
+			      </one-of>
+			    </rule>			
+			</grammar>
+			<prompt>
+				<audio fetchhint="prefetch" expr="app_audio_path + '5210.wav'">
+					<voice name="jan">Please enter your 5 digit ZIP Code.</voice>
+				</audio>
+			</prompt>
+			<catch event="noinput nomatch">
+				<assign name="repromptCount" expr="repromptCount + 1" />
+				<if cond="repromptCount &lt;= MAX_REPT">
+					<prompt>
+						<audio fetchhint="prefetch" expr="app_audio_path + '5010.wav'">
+							<voice name="jan">I am sorry.</voice>
+						</audio>
+					</prompt>
+					<clear namelist="Response_field" />
+					<reprompt />
+				<else />
+					<assign name="g_marker" expr="'M210-61'" />
+					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+					<goto next="cal008_250_PlayNoZip.vxml" />
+				</if>
+			</catch>
+			<filled>
+				<var name="collectedResponse" expr="Response_field" />
+					<assign name="g_marker" expr="'M210-61'" />
+					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
+					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+					<assign name="G_zip" expr="collectedResponse" />
+					<goto next="cal008_220_ConfirmZip.vxml" />
+			</filled>
+		</field>
+	</form>
+</vxml>
