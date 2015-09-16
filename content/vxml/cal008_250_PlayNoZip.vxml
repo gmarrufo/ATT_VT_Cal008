@@ -30,7 +30,7 @@
 					<voice name="jan">If you do not know your five digit ZIP Code, you can call 1-800-852-5770 between the hours of 8:00 a.m. and 5:00 p.m., Monday through Friday and a WIC operator can assist you.</voice>
 				</audio>
 			</prompt>
-			<if cond="Lang == '1' || Lang == '2'">
+			<if cond="LANGUAGE == 'english' || LANGUAGE == 'spanish'">
 				<prompt>				
 					<audio fetchhint="prefetch" expr="app_audio_path + '5251.wav'">
 						<voice name="jan">When calling this toll free number, if you do not speak English or Spanish, you will need to have a friend or family member with you who can speak English or Spanish.</voice>
