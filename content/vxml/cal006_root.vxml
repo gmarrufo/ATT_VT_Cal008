@@ -1,0 +1,184 @@
+	<script><![CDATA[
+            function getAlarmUrl(sevLevel, appid, message, alarmid) {
+                var url = "/PlatServlets/GenAlarm?";
+                url += "appid=" + appid + '&';
+                url += "sevLevel=" + sevLevel + '&';
+                url += "alarmid=" + alarmid + '&';
+                url += "outputType=wave&";
+                url += "errorMessage=" + message ;
+                return url;
+            }
+         ]]></script>
+	<!-- ***** End Alarm Globals ***** -->
+
+	<var name="g_terminationType" expr="''"/>		
+	<var name="eventErr" expr="''"/>
+	
+	<!-- ***** App Functions ***** -->
+	<catch event="error">
+		<assign name="g_errorFlag" expr="true"/>
+		<log>
+			<value expr="appid+'.'+vxmlFileName"/>
+			: Markers Set =
+			<value expr="g_markerString"/>
+		</log>
+		<log>
+			CHIScan ExitTag:<value expr="setCHIexit(LanguageAbbrev + '900', 'Hangup')"/>
+		</log>
+		<assign name="g_errLoopCounter" expr="g_errLoopCounter + 1"/>
+		<log level="0">
+			VOICETONESTDLOG.
+			<value expr="appid"/>
+			.
+			<value expr="appid"/>
+			_root.error:event=
+			<value expr="_event"/>
+			,message=
+			<value expr="_message"/>
+			,DNIS=
+			<value expr="cdh_DNIS"/>
+			,ANI=
+			<value expr="cdh_ANI"/>
+			, g_errLoopCounter=
+			<value expr="g_errLoopCounter"/>
+		</log>
+		<if cond="g_errLoopCounter > 1">
+			<if cond="false == g_bDisconnected">
+				<goto next="cal006_dropCDH.vxml"/>
+			</if>
+		</if>
+		<assign name="application.alarmid" expr="getAlarmID(_event)"/>
+		<assign name="application.sevLevel" expr="'MAJOR'"/>
+		<assign name="application.errorMessage" expr="application.appid + '_root.error:' + application.errorEvent + ':Message=' + _event + ':' + _message + ':CALLID=' + callid"/>
+		<log level="0">
+				VOICETONESTDLOG.cal006.cal006_root.vxml.Error Event:<value expr="gs_sessionId"/>: Sending Alarm: <value expr="application.errorMessage"/>
+		</log>
+		<audio expr="getAlarmUrl(application.sevLevel, appid, escape(application.errorMessage), application.alarmid)"/>
+		<if cond="g_bDisconnected == true">
+			<!--<assign name="g_AlarmReturnVxmlPage" expr="'cal006_dropCDH.vxml'"/>-->
+			<goto next="cal006_dropCDH.vxml"/>
+			<else/>
+			<prompt bargein="false">
+				<audio fetchhint="prefetch" expr="app_audio_path + '1185.wav'">
+					We&apos;re sorry, but we&apos;re experiencing difficulties. Please call again. Thank you.
+				</audio>
+			</prompt>
+			<disconnect/>
+		</if>
+	</catch>
+	<!--*********************Disconnect or Hangup********************* -->
+	<catch event="telephone.disconnect.hangup connection.disconnect.hangup">
+		<assign name="g_bDisconnected" expr="true"/>
+		<log>
+			current g_terminationType:
+			<value expr="g_terminationType"/>
+		</log>
+		<var name="msg" expr="_message"/>
+		<if cond="( msg.indexOf('disconnect') >= 0 )">
+			<assign name="g_terminationType" expr="'a'"/>
+			<assign name="CHI_Disposition" expr="'EndCall'"/>
+			<assign name="CHI_destination_name" expr="'Disconnect'"/>
+			<else/>
+			<assign name="g_terminationType" expr="'c'"/>
+			<assign name="CHI_Disposition" expr="'Hangup'"/>
+			<if cond="g_immedHU == 1">
+				<log>
+					CHIScan ExitTag:<value expr="setCHIexit(LanguageAbbrev + '700', 'Hangup')"/>
+				</log>
+				<else/>
+				<assign name="CHI_ExitTag" expr="setCHIexit(LanguageAbbrev + '800', 'Hangup')"/>
+				<if cond="CHI_ExitTag.substr(1,4) == '800'">
+					<log>
+						CHIScan ExitTag:<value expr="CHI_ExitTag"/>
+					</log>
+				</if>
+			</if>
+		</if>
+		<log>
+			<value expr="appid"/>
+			_root.event.hangup:HANGUP:event=
+			<value expr="_event"/>
+			,Message:
+			<value expr="_message"/>
+			, g_markerString=
+			<value expr="g_markerString"/>
+			, g_terminationType:
+			<value expr="g_terminationType"/>
+		</log>
+		<if cond="transactionID == 'A'">
+			<assign name="ETS_A" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'A'"/>
+			<assign name="cdh_START_TIME" expr="STS_A"/>
+			<assign name="cdh_END_TIME" expr="ETS_A"/>
+			<elseif cond="transactionID == 'B'"/>
+			<assign name="ETS_B" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'B'"/>
+			<assign name="cdh_START_TIME" expr="STS_B"/>
+			<assign name="cdh_END_TIME" expr="ETS_B"/>
+			<elseif cond="transactionID == 'C'"/>
+			<assign name="ETS_C" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'C'"/>
+			<assign name="cdh_START_TIME" expr="STS_C"/>
+			<assign name="cdh_END_TIME" expr="ETS_C"/>
+			<elseif cond="transactionID == 'D'"/>
+			<assign name="ETS_D" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'D'"/>
+			<assign name="cdh_START_TIME" expr="STS_D"/>
+			<assign name="cdh_END_TIME" expr="ETS_D"/>
+			<elseif cond="transactionID == 'E'"/>
+			<assign name="ETS_E" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'E'"/>
+			<assign name="cdh_START_TIME" expr="STS_E"/>
+			<assign name="cdh_END_TIME" expr="ETS_E"/>
+			<elseif cond="transactionID == 'F'"/>
+			<assign name="ETS_F" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'F'"/>
+			<assign name="cdh_START_TIME" expr="STS_F"/>
+			<assign name="cdh_END_TIME" expr="ETS_F"/>
+			<elseif cond="transactionID == 'H'"/>
+			<assign name="ETS_H" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'H'"/>
+			<assign name="cdh_START_TIME" expr="STS_H"/>
+			<assign name="cdh_END_TIME" expr="ETS_H"/>
+			<elseif cond="transactionID == '6'"/>
+			<assign name="ETS_6" expr="getCDHTime()"/>
+			<assign name="cdh_RECORD_TYPE" expr="'6'"/>
+			<assign name="cdh_START_TIME" expr="STS_6"/>
+			<assign name="cdh_END_TIME" expr="ETS_6"/>
+		</if>
+		<log>
+			CHI_Disposition:<value expr="CHI_Disposition"/>
+		</log>
+		<if cond="CHI_Disposition == 'Hangup' &amp;&amp; RecordingCount &gt; 0">
+			<assign name="PostHangupSubmit" expr="true"/>
+			<log>
+				PostHangupSubmit:<value expr="PostHangupSubmit"/>
+			</log>
+			<if cond="RequestType=='RequestBillingDetails'">
+				<goto next="cal006_Form112281.vxml#StartSession"/>
+				<elseif cond="RequestType=='RequestUpdateContactInfo'"/>
+				<goto next="cal006_Form112282.vxml#StartSession"/>
+				<elseif cond="RequestType=='RequestSMSaccount'"/>
+				<goto next="cal006_Form112283.vxml#StartSession"/>
+				<elseif cond="RequestType=='RequestCredit'"/>
+				<goto next="cal006_Form112284.vxml#StartSession"/>
+				<elseif cond="RequestType=='UpdateAgencyContactInfo'"/>
+				<goto next="cal006_Form112285.vxml#StartSession"/>
+				<elseif cond="RequestType=='RequestDisabledCustomerBilling'"/>
+				<goto next="cal006_Form112299.vxml#StartSession"/>
+			</if>
+			<else/>
+			<if cond="RequestType=='' || UploadedCount==RecordingCount">
+				<log>
+					Upload Already Completed
+				</log>
+				<goto next="cal006_dropCDH.vxml#dropFinalTransactionRecord"/>
+			<else/>
+				<log level="0">VT_LOG:ModuleStart:Module=MS900-SubmitResponse</log>
+				<assign name="g_markerString" expr="pegMarker(g_markerString, 'M900-00')"/>
+				<assign name="CHI_ExitTag" expr="setCHIexit(LanguageAbbrev + '901', 'Business Rule Transfer')"/>
+				<goto next="cal006_dropCDH.vxml#dropFinalTransactionRecord"/>
+			</if>
+		</if>
+	</catch>
+</vxml>

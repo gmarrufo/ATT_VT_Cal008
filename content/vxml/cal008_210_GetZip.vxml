@@ -23,6 +23,7 @@
 		<block>
 			<assign name="formName" expr="'SelectResponse'" />
 		</block>
+<!--		
 		<field name="Response_field" type="digits?length=5" slot="answer">
 			<grammar type="application/x-abnf" mode="dtmf">
 				<rule id="keypress" scope = "public">
@@ -40,6 +41,9 @@
 			      </one-of>
 			    </rule>			
 			</grammar>
+-->
+		<field name="Response_field" slot="answer">
+			<grammar mode="dtmf" src="builtin:dtmf/digits?length=5"/>		
 			<prompt>
 				<audio fetchhint="prefetch" expr="app_audio_path + '5210.wav'">
 					<voice name="jan">Please enter your 5 digit ZIP Code.</voice>
@@ -64,11 +68,17 @@
 			</catch>
 			<filled>
 				<var name="collectedResponse" expr="Response_field" />
-					<assign name="g_marker" expr="'M210-61'" />
+				<if cond="collectedResponse.length==5">    
+					<assign name="g_marker" expr="'M210-01'" />
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
-					<assign name="G_zip" expr="collectedResponse" />
-					<goto next="cal008_220_ConfirmZip.vxml" />
+					<assign name="g_enteredZipcode" expr="collectedResponse" />				   
+					<log>Caller entered g_enteredZipcode=<value expr="g_enteredZipcode"/></log>					
+					<goto next="cal008_220_ConfirmZip.vxml" />					                                                           
+				<else/>   <!-- collectedResponse.length NOT 5 -->
+					<clear namelist="Response_field" />				
+					<throw event="nomatch"/>
+				</if>									
 			</filled>
 		</field>
 	</form>
