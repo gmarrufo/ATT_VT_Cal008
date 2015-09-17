@@ -1,0 +1,67 @@
+# THIS INSTALL SCRIPT SHOULD IMPORT DATA TO TABLES AND CREATE TABLES.
+#Drop the table first in order to import the table data
+
+echo "Postinstall script"
+
+# Begin postinstall script
+ORACLE_HOME=/oracle
+export ORACLE_HOME
+
+ORACLE_SID=WEVS
+export ORACLE_SID
+
+PATH=$PATH:$ORACLE_HOME/lib:$ORACLE_HOME/bin
+export PATH
+#
+BIN=/oracle/bin
+ORACLE_HOME=/oracle
+
+export ORACLE_HOME
+PATH=$PATH:$ORACLE_HOME/bin:$ORACLE_HOME/lib
+export PATH
+#
+cd /usr/local/vtone/apps/cal008/sql
+echo "******************************************************************"
+echo "create replicated app tables"
+echo "it is ok if these commands fail with TABLE ALREADY EXISTS error"
+echo "******************************************************************"
+./cal008_app_tbl_create.sh
+
+echo "******************************************************************"
+echo "Executing scripts to provision FSU,ADDS,Reports on platform"
+echo "******************************************************************"
+./cal008_plat_tbl_setup.sh
+
+echo "******************************************************************"
+echo "create non-replicated report tables"
+echo "it is ok if these commands fail with TABLE ALREADY EXISTS error"
+echo "******************************************************************"
+echo "Executing cal008_rpt_tbl_create_norep.sh"
+echo
+./cal008_rpt_tbl_create_norep.sh
+
+echo "******************************************************************"
+echo "create replicated report tables"
+echo "it is ok if these commands fail with TABLE ALREADY EXISTS error"
+echo "******************************************************************"
+echo "Executing cal008_rpt_tbl_create_rep.sh"
+echo
+#./cal008_rpt_tbl_create_rep.sh
+
+echo
+echo "******************************************************************"
+echo "install report rollup code"
+echo "******************************************************************"
+#./cal008_rpt_rollup_pkg_install.sh
+
+echo
+echo "schedule report rollups for 90 minutes past midnight"
+echo "******************************************************************"
+#./cal008_rpt_sched_on.sh
+echo
+
+#add app terminations
+/usr/local/vtone/plat/wevsrdr/sql/add_app_url.sh cal008 "/cal008/vxml/cal008.vxml"
+
+echo "Done"
+exit 0
