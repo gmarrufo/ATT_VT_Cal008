@@ -1,0 +1,230 @@
+M100-00|Entry to Introduction
+M100-01|Caller chooses English, on Introduction
+M100-02|Caller chooses Spanish on Introduction
+M100-45|Caller makes no entry, on Introduction
+M100-61|Caller enters invalid key (default to English), on Introduction
+M120-00|Entry to Factsheet Menu
+M120-01|Caller wants a copy of a factsheet, on Factsheet Menu
+M120-09|Caller wants to go to the main menu, on Factsheet Menu
+M120-11|Caller wants to go back to the main menu, on Factsheet Menu
+M120-61|Error Counter Exceeded, on Factsheet Menu
+M150-00|Entry to Main Menu
+M150-01|Caller wants location infomration, on Main Menu
+M150-02|Caller wants the Injured Worker Menu, on Main Menu
+M150-03|Caller wants the Workers' Compensation Insurer Menu, on Main Menu
+M150-04|Caller wants the Medical Provider Menu, on Main Menu
+M150-05|Caller wants the Employer or Insurer Menu, on Main Menu
+M150-06|Caller wants to file a complaint, on Main Menu
+M150-09|Caller wants to go to the Main Menu, on Main Menu
+M150-11|Caller wants to go back to the Main Menu, on Main Menu
+M150-61|Error Counter Exceeded, on Main Menu
+M200-00|Entry to Locations
+M200-01|Caller enters 5 digit zip code, on Locations
+M200-61|Error Counter Exceeded, on Locations
+M202-00|Entry to Location Playback
+M202-01|Valid data returned from table lookup, on Location Playback
+M202-09|Caller wants to go to the Main Menu, on Location Playback
+M202-11|Caller wants to go back to the Main Menu, on Location Playback
+M202-41|Unsuccessful table lookup, on Location Playback
+M202-42|First time zip code not found on table lookup, on Location Playback
+M202-43|Second time zip code not found on table lookup, on Location Playback
+M202-45|Successful playback of location information and no caller input, on Location Playback
+M205-00|Entry to Location Addresses
+M300-00|Entry to Injured Worker Menu
+M300-01|Caller wants the File Claim Process, on Injured Worker Menu
+M300-02|Caller wants the Benefit Description Menu, on Injured Worker Menu
+M300-03|Caller wants information on Claim Appeal, on Injured Worker Menu
+M300-04|Caller wants UEF Info, on Injured Worker Menu
+M300-09|Caller wants to go to the Main Menu, on Injured Worker Menu
+M300-11|Caller wants to go back to the Main Menu, on Injured Worker Menu
+M300-61|Error Counter Exceeded, on Injured Worker Menu
+M310-00|Entry to File Claim Process
+M310-01|Caller wants a workers' compensation guidebook, on File Claim Process
+M310-09|Caller wants to go to the Main Menu, on File Claim Process
+M310-11|Caller wants to go back to the Injured Worker Menu, on File Claim Process
+M310-45|Caller finshes listening to the phrase and wishes to move on, on File Claim Process
+M310-61|Error Counter Exceeded, on File Claim Process
+M320-00|Entry to Benefit Description Menu
+M320-01|Caller wants Medical Benefit information, on Benefit Description Menu
+M320-02|Caller wants Temporary Disability Benefits information, on Benefit Description Menu
+M320-03|Caller wants Permanent Disability Benefits information, on Benefit Description Menu
+M320-04|Caller wants Supplemental Job Displacement information, on Benefit Description Menu
+M320-05|Caller wants Death Benefit information, on Benefit Description Menu
+M320-09|Caller wants to go to the Main Menu, on Benefits Description Menu
+M320-11|Caller wants to go back to the Injured Worker Menu, on Benefits Description Menu
+M320-61|Error Counter Exceeded, on Benefits Description Menu
+M330-00|Entry to Medical Benefit
+M330-09|Caller wants to go to the Main Menu, on Medical Benefit
+M330-11|Caller wants to go back to the Benefit Description Menu, on Medical Benefit
+M330-45|Caller finshes listening to the phrase and wishes to move on, on Medical Benfit
+M340-00|Entry to Temp Disability Benefit
+M340-09|Caller wants to go to the Main Menu, on Temp Disabilty Benefit
+M340-11|Caller wants to go back to the Benefit Description Menu, on Temp Disability Benefit
+M340-45|Caller finshes listening to the phrase and wishes to move on, on Temp Disability Benefit
+M350-00|Entry to Perm Disability Benefit
+M350-09|Caller wants to go to the Main Menu, on Perm Disabilty Benefit
+M350-11|Caller wants to go back to the Benefit Description Menu, on Perm Disability Benefit
+M350-45|Caller finshes listening to the phrase and wishes to move on, on Perm Disability Benefit
+M370-00|Entry to Supplemental Job Displacement
+M370-09|Caller wants to go to the Main Menu, on Supplemental Job Displacement
+M370-11|Caller wants to go back to the Benefit Description Menu, on Supplemental Job Displacement
+M370-45|Caller finshes listening to the phrase and wishes to move on, on Supplemental Job Displacement
+M380-00|Entry to Death Benefit
+M380-09|Caller wants to go to the Main Menu, on Death Benefit
+M380-11|Caller wants to go back to the Benefit Description Menu, on Death Benefit
+M380-45|Caller finshes listening to the phrase and wishes to move on, on Death Benefit
+M400-00|Entry to Claim Appeal
+M400-01|Caller wants a listing of Appeals Board offices, on Claim Appeal
+M400-09|Caller wants to go to the Main Menu, on Claim Appeal
+M400-11|Caller wants to go back to the Injured Worker Menu, on Claim Appeal
+M400-45|Caller finshes listening to the phrase and wishes to move on, on Claim Appeal
+M400-61|Error Counter Exceeded, on Claim Appeal
+M410-00|Entry to UEF Info
+M410-01|Caller wants contact information for the UEF offices, on UEF Info
+M410-09|Caller wants to go to the Main Menu, on UEF Info
+M410-11|Caller wants to go back to the Injured Worker Menu, on UEF Info
+M410-45|Caller finshes listening to the phrase and wishes to move on, on UEF Info
+M410-61|Error Counter Exceeded, on UEF Info
+M420-00|Entry to UEF Phones
+M420-01|Caller wants to hear the UEF office contact information again, on UEF Phones
+M420-09|Caller wants to go to the Main Menu, on UEF Phones
+M420-11|Caller wants to go back to the Injured Worker Menu, on UEF Phones
+M420-21|Caller has reached the maximum number of times they can hear the UEF office contact information, on UEF Phones
+M420-61|Error Counter Exceeded, on UEF Phones
+M500-00|Entry to Workers' Comp Insurer Menu
+M500-01|Caller wants information about State Compensation Insurance Fraud, on Workers' Comp Insurer Menu
+M500-02|Caller wants information about the State Disability Insurance Program, on Workers' Comp Insurer Menu
+M500-03|Caller is a government worker, on Workers' Comp Insurer Menu
+M500-04|Caller wants information about OSHA, on Workers' Comp Insurer Menu
+M500-05|Caller wants information about Labor Standards, on Workers' Comp Insurer Menu
+M500-09|Caller wants to go to the Main Menu, on Workers' Comp Insurer Menu
+M500-11|Caller wants to go back to the Main Menu, on Worker's Comp Insurer Menu
+M500-61|Error Counter Exceeded, on Worker's Comp Insurer Menu
+M510-00|Entry to State Comp Insurance Fund
+M510-09|Caller wants to go to the Main Menu, on State Comp Insurance Fund
+M510-11|Caller wants to go back to the Worker's Comp Insurer Menu, on State Comp Insurance Fund
+M510-45|Caller finshes listening to the phrase and wishes to move on, on State Comp Insurance Fund
+M520-00|Entry to State Disability Insurance Plan
+M520-09|Caller wants to go to the Main Menu, on State Disability Insurance Plan
+M520-11|Caller wants to go back to the Worker's Comp Insurer Menu, on State Disability Insurance Plan
+M520-45|Caller finshes listening to the phrase and wishes to move on, on State Disability Insurance Plan
+M530-00|Entry to Govt Worker
+M530-09|Caller wants to go to the Main Menu, on Govt Worker
+M530-11|Caller wants to go back to the Worker's Comp Insurer Menu, on Govt Worker
+M530-45|Caller finshes listening to the phrase and wishes to move on, on Govt Worker
+M540-00|Entry to OSHA
+M540-09|Caller wants to go to the Main Menu, on OSHA
+M540-11|Caller wants to go back to the Worker's Comp Insurer Menu, on OSHA
+M540-45|Caller finshes listening to the phrase and wishes to move on, onOSHA
+M550-00|Entry to Labor Standards
+M550-09|Caller wants to go to the Main Menu, on Labor Standards
+M550-11|Caller wants to go back to the Worker's Comp Insurer Menu, on Labor Standards
+M550-45|Caller finshes listening to the phrase and wishes to move on, on Labor Standards
+M600-00|Entry to Medical Provider Menu
+M600-01|Caller wants information about Fee Schedules, on Medical Provider Menu
+M600-02|Caller wants information about the IMR, on Medical Provider Menu
+M600-03|Caller wants information about the IBR, on Medical Provider Menu
+M600-04|Caller wants information about Qualified Medical Examiner, on Medical Provider Menu
+M600-05|Caller wants information aboutHealth Care Organizations, on Medical Provider Menu
+M600-06|Caller wants information about MPNs, on Medical Provider Menu
+M600-09|Caller wants to go to the Main Menu, on Medical Provider Menu
+M600-11|Caller wants to go back to the Main Menu, on Medical Provider Menu
+M600-61|Error Counter Exceeded, on Medical Provider Menu
+M610-00|Entry to Fee Schedule
+M610-09|Caller wants to go to the Main Menu, on Fee Schedule
+M610-11|Caller wants to go back to the Medical Provider Menu, on Fee Schedule
+M610-45|Caller finshes listening to the phrase and wishes to move on, on Fee Schedule
+M620-00|Entry to IMR
+M620-09|Caller wants to go to the Main Menu, on IMR
+M620-11|Caller wants to go back to the Medical Provider Menu, on IMR
+M620-45|Caller finshes listening to the phrase and wishes to move on, on IMR
+M625-00|Entry to IBR
+M625-09|Caller wants to go to the Main Menu, on IBR
+M625-11|Caller wants to go back to the Medical Provider Menu, on IBR
+M625-45|Caller finshes listening to the phrase and wishes to move on, on IBR
+M630-00|Entry to Quality Medical
+M630-09|Caller wants to go to the Main Menu, on Quality Medical
+M630-11|Caller wants to go back to the Medical Provider Menu, on Quality Medical
+M630-45|Caller finshes listening to the phrase and wishes to move on, on Quality Medical
+M640-00|Entry to Health Care Organizations
+M640-09|Caller wants to go to the Main Menu, on Health Care Organizations
+M640-11|Caller wants to go back to the Medical Provider Menu, on Health Care Organizations
+M640-45|Caller finshes listening to the phrase and wishes to move on, on Health Care Organizations
+M670-00|Entry to MPN
+M670-09|Caller wants to go to the Main Menu, on MPN
+M670-11|Caller wants to go back to the Medical Provider Menu, on MPN
+M670-45|Caller finshes listening to the phrase and wishes to move on, on MPN
+M700-00|Entry to Employer or Insurer Menu
+M700-01|Caller wants information about Reporting Occupational Injuries, on Employer or insurer Menu
+M700-02|Caller wants information about the Claim Form, on Employer or insurer Menu
+M700-03|Caller wants Help with the claim form, on Employer or insurer Menu
+M700-04|Caller wants information about Insurance Coverage, on Employer or insurer Menu
+M700-05|Caller wants information about the Employer Bill of Rights, on Employer or insurer Menu
+M700-06|Caller wants to Report Fraud, on Employer or insurer Menu
+M700-09|Caller wants to go to the Main Menu, on Employer or insurer Menu
+M700-11|Caller wants to go back to the Main Menu, on Employer or insurer Menu
+M700-61|Error Counter Exceeded, on Employer or insurer Menu
+M710-00|Entry to Report Occupational Injury
+M710-01|Caller wants a Form 5020, on Report Occupational Injury
+M710-09|Caller wants to go to the Main Menu, on Report Occupational Injury
+M710-11|Caller wants to go back to the Employer or Insurer Menu, on Report Occupational Injury
+M710-45|Caller finshes listening to the phrase and wishes to move on, on Report Occupational Injury
+M710-61|Error Counter Exceeded, on Report Occupational Injury
+M720-00|Entry to Copy of Claim Form
+M720-09|Caller wants to go to the Main Menu, on Copy of Claim Form
+M720-11|Caller wants to go back to the Employer or Insurer Menu, on Copy of Claim Form
+M720-45|Caller finshes listening to the phrase and wishes to move on, on Copy of Claim Form
+M730-00|Entry to Claim Form Help
+M730-09|Caller wants to go to the Main Menu, on Claim Form Help
+M730-11|Caller wants to go back to the Employer ir Insurer Menu, on Claim Form Help
+M730-45|Caller finshes listening to the phrase and wishes to move on, on Claim Form Help
+M740-00|Entry to Workers Insurance Menu
+M740-01|Caller wants information about Requirements and Penalties, on Workers Insurance Menu
+M740-02|Caller wants information about the Insurance Rating Bureau, on Workers Insurance Menu
+M740-03|Caller wants information about Self Insurance, on Workers Insurance Menu
+M740-04|Caller wants information about Employee or Contractor definition, on Workers Insurance Menu
+M740-09|Caller wants to go to the Main Menu, on Workers Insurance Menu
+M740-11|Caller wants to go back to the Employer or Insurer Menu, on Workers Insurance Menu
+M740-61|Error Counter Exceeded, on Workers Insurance Menu
+M750-00|Entry to Requirements and Penalties
+M750-09|Caller wants to go to the Main Menu, on Requirements and Penalties
+M750-11|Caller wants to go back to the Workers Insurance Menu, on Requirements and Penalties
+M750-45|Caller finshes listening to the phrase and wishes to move on, on Requirements and Penalties
+M780-00|Entry to Insurance Rating Bureau
+M780-09|Caller wants to go to the Main Menu, on Insurance Rating Bureau
+M780-11|Caller wants to go back to the Workers Insurance Menu, on Insurance Rating Bureau
+M780-45|Caller finshes listening to the phrase and wishes to move on, on Insurance Rating Bureau
+M790-00|Entry to Self Insured Information
+M790-09|Caller wants to go to the Main Menu, on Self Insured Information
+M790-11|Caller wants to go back to the Workers Insurance Menu, on Self Insured Information
+M790-45|Caller finshes listening to the phrase and wishes to move on, on Self Insured Information
+M800-00|Entry to Employee or Contractor
+M800-09|Caller wants to go to the Main Menu, on Employee or Contractor
+M800-11|Caller wants to go back to the Workers Insurance Menu, on Employee or Contractor
+M800-45|Caller finshes listening to the phrase and wishes to move on, on Employee or Contractor
+M810-00|Entry to Employer Bill of Rights
+M810-09|Caller wants to go to the Main Menu, on Employer Bill of Rights
+M810-11|Caller wants to go back to the Employer or Insurer Menu, on Employer Bill of Rights
+M810-45|Caller finshes listening to the phrase and wishes to move on, on Employer Bill of Rights
+M820-00|Entry to Report Fraud
+M820-09|Caller wants to go to the Main Menu, on Report Fraud
+M820-11|Caller wants to go back to the Employer or Insurer Menu, on Report Fraud
+M820-45|Caller finshes listening to the phrase and wishes to move on, on Report Fraud
+M900-00|Entry to File Complaint
+M900-09|Caller wants to go to the Main Menu, on File Complaint
+M900-11|Caller wants to go back to the Main Menu, on File Complaint
+M900-45|Caller finshes listening to the phrase and wishes to move on, on File Complaint
+M1000-00|Entry to Final Menu
+M1000-01|Caller wants to leave a comment, on Final Menu
+M1000-02|Caller wants to end the call, on Final Menu
+M1000-03|Caller wants to get location information (hidden), on Final Menu
+M1000-09|Caller wants to go to the Main Menu, on Final Menu
+M1000-11|Caller wants to go back to the Previous Menu, on Final Menu
+M1000-61|Error Counter Exceeded, on Final Menu
+M1200-00|Entry to Comment
+M1200-01|Caller successfully left a comment, on Comment
+M1200-61|Error Counter Exceeded, on Comment
+M1500-00|Entry to Voice Forms
+M1500-01|Caller successfully ordered a Voice Form, on Voice Forms
+M1500-61|Error Counter Exceeded, on Voice Forms
+M2000-00|Entry to Goodbye
