@@ -147,7 +147,12 @@
     <var name="G_food" expr="0"/>
     
     <var name = "Locator" expr = "'Y'" />
-                   
+
+    <var name="g_enteredZipcode" expr="0"/>   <!-- caller can listen to locations for up to 5 zipcodes (MAX_ZIP) in a call -->
+                                                                    <!-- g_enteredZipcode is the current or latest zipcode that caller enters -->
+    <var name="g_locationInfoList" expr = "" />  <!-- list of locations returned from g_enteredZipcode -->
+    
+
    	<!-- ***** END Application Globals *****  -->
 
    	<!--  ***** App Functions *****  -->
