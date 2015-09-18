@@ -34,15 +34,14 @@ addsTableNames=("cal008_zipcode_locations" "cal008_location_phrase" "cal008_mark
 fsuID=("20151104" "20151105" "20151106" "20151107" "20151108");
 fsuLang=("english" "spanish" "vietnamese" "cantonese" "hmong");
 fsuPhraseList=("5010-5014,5016-5017,5020-5039,5101-5103,5110-5113,5200-5201,5210,5220,5231-5237,5240-5247,5250-5252,5300-5302,5310,5320,5330-5332,5340,5350,6000-6199" "5010-5014,5016-5017,5020-5039,5101-5103,5110-5113,5200-5201,5210,5220,5231-5237,5240-5247,5250-5252,5300-5302,5310,5320,5330-5332,5340,5350,6000-6199" "5010-5014,5016-5017,5020-5039,5101-5103,5110-5113,5200-5201,5210,5220,5231-5237,5240-5247,5250-5252,5300-5302,5310,5320,5330-5332,5340,5350,6000-6199" "5010-5014,5016-5017,5020-5039,5101-5103,5110-5113,5200-5201,5210,5220,5231-5237,5240-5247,5250-5252,5300-5302,5310,5320,5330-5332,5340,5350,6000-6199" "5010-5014,5016-5017,5020-5039,5101-5103,5110-5113,5200-5201,5210,5220,5231-5237,5240-5247,5250-5252,5300-5302,5310,5320,5330-5332,5340,5350,6000-6199");
-fsuUserList=("calusr:20150814" "attpm1cal:20150814" "attpmcal:20150814");
+fsuUserList=("calusr:20151104" "calusr:20151105" "calusr:20151106" "calusr:20151107" "calusr:20151108" "attpm1cal:20151104" "attpm1cal:20151105" "attpm1cal:20151106" "attpm1cal:20151107" "attpm1cal:20151108" "attpmcal:20151104" "attpmcal:20151105" "attpmcal:20151106" "attpmcal:20151107" "attpmcal:20151108");
 
 ### configurable parameters ends
 ######
 
 ## provision userid and names nere. Make sure to put them in double quotes and they should be space separated
-userid=("calusr" "attpm1cal" "attpmcal" "sr005u");
-username=("CAL Test User" "Proj MGR CAL" "CAL LifeCycle Manager" "Susanta Routray");
-
+userid=("calusr" "attpm1cal" "attpmcal");
+username=("CAL Test User" "Proj MGR CAL" "CAL LifeCycle Manager");
 
 tmpFile='/var/tmp/'${appid}'.out'
 echo "" > $tmpFile;
@@ -74,6 +73,7 @@ echo "UPDATE wevsbill.USER_INFO SET USERNAME='${2}' WHERE USERID='${1}';" >> ${t
 echo "INSERT INTO wevsbill.USER_INFO (USERID, USERNAME, CUSTOMERID,  PASSWORD, LASTMODIFIED, AGINGDAYS,  USER_STATUS, INV_ATTEMPTS) VALUES ('${1}','${2}','${customerid}','',sysdate, '999','F', '0');" >> ${tmpFile}
 echo "INSERT INTO wevsbill.USER_APPS (USERID, APPID, REPORTID) VALUES ('${1}','${appid}',0);" >> ${tmpFile}
 echo "INSERT INTO wevsbill.USER_APPS (USERID, APPID, REPORTID) VALUES ('${1}','${appid}',1);" >> ${tmpFile}
+echo "INSERT INTO wevsbill.USER_APPS (USERID, APPID, REPORTID) VALUES ('${1}','${appid}',2);" >> ${tmpFile}
 
 ###-- ADDS related
 echo "INSERT INTO wevsplat.USER_ADDSWEB (USERID, APPID, SOURCE_DIR, APPNAME) VALUES ('${1}','${appid}','/usr/local/www/addsweb', '${appname}');" >> ${tmpFile}
@@ -116,12 +116,12 @@ echo "set escape '\';" >> ${tmpFile}
 echo "delete from wevsbill.app_reports where appid = '${appid}';" >> ${tmpFile};
 echo "insert into wevsbill.app_reports(appid, reportid, reportname, reporturl) values ('${appid}',0,'Standard Report','/RPT/standard.jsp?appid=${appid}');" >> ${tmpFile};
 echo "insert into wevsbill.app_reports(appid, reportid, reportname, reporturl) values ('${appid}',1,'CA WIC Call Path Analysis Report','/acweb/ReportInfoServlet?extrainfo=parameters/cal008_SdEdSort');" >> ${tmpFile};
-echo "insert into wevsbill.app_reports(appid, reportid, reportname, reporturl) values ('${appid}',1,'CA WIC Zip Code By Location Report','/acweb/ReportInfoServlet?extrainfo=parameters/cal008_ZipLoc');" >> ${tmpFile};
+echo "insert into wevsbill.app_reports(appid, reportid, reportname, reporturl) values ('${appid}',2,'CA WIC Zip Code By Location Report','/acweb/ReportInfoServlet?extrainfo=parameters/cal008_ZipLoc');" >> ${tmpFile};
 
 echo "-- ADD ROWS TO ACTUATE_REPORTS" >> ${tmpFile};
 echo " delete from wevsbill.actuate_reports where appid = '${appid}';" >> ${tmpFile};
 echo "insert into wevsbill.actuate_reports(appid, reportid, actuserid, executablename, reporttitle) values ('${appid}',1,'rptuser','/rptuser/cal008_CPA.rox', 'CA WIC Call Path Analysis Report');" >> ${tmpFile};
-echo "insert into wevsbill.actuate_reports(appid, reportid, actuserid, executablename, reporttitle) values ('${appid}',1,'rptuser','/rptuser/cal008_ZipLoc.rox', 'CA WIC Zip Code By Location Report');" >> ${tmpFile};
+echo "insert into wevsbill.actuate_reports(appid, reportid, actuserid, executablename, reporttitle) values ('${appid}',2,'rptuser','/rptuser/cal008_ZipLoc.rox', 'CA WIC Zip Code By Location Report');" >> ${tmpFile};
 
 echo "commit;" >> ${tmpFile};
 } ## ends start function
@@ -211,29 +211,10 @@ done
 
 echo "commit;" >> ${tmpFile}
 
-#############################
-###########-- Voice Capture related
-#############################
-
-echo "insert into wevsplat.transcr_apps (appid, descr) values ('cal008', 'CAL009 Voice Capture');" >> ${tmpFile}
-
-echo "insert into wevsplat.transcr_services (service, descr) values ('Workers_Comp', 'CAL009 Voice Capture');" >> ${tmpFile}
-
-echo "insert into wevsplat.transcr_app_services (appid, service) values ('cal008', 'English');" >> ${tmpFile}
-
-echo "insert into wevsplat.transcr_app_services (appid, service) values ('cal008', 'Spanish');" >> ${tmpFile}
-
-echo "insert into wevsplat.transcr_users (userid) values ('calusr');" >> ${tmpFile}
-
-echo "insert into wevsplat.transcr_user_apps (appid,userid) values ('cal008','calusr');" >> ${tmpFile}
-
-echo "commit;" >> ${tmpFile}
-
 echo "!EOF" >> ${tmpFile}
 
 /oracle/bin/sqlplus wevsbill/$pw@wevs <<!EOF
 !${tmpFile}
 !EOF
-
 	
 echo " cal008 FSU/ADDS/Reports user provisioning steps are done...."
