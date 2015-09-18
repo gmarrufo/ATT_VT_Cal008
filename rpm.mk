@@ -2,6 +2,7 @@ include ../../tarrules.mk
 include ../../rpmrules.mk
 
 :ALL: cal008CS.tar - rpm-cs  
+ALL: cal008CS.tar - rpm-cs - cal008DB.tar - rpm-ds
 
 cal008DB.tar :TAR: database rpm/ds/postinstall 
 
