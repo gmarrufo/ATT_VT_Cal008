@@ -16,6 +16,9 @@
 			<assign name="g_marker" expr="'M110-00'" />
 			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+			<!-- Peg E800 after Unit 100, here peg after marker M110-00 -->			
+			<assign name="CHI_exit_type" expr="'E800'"/>			
+			<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>					
 			<log level="0" expr="moduleStart('MS-MainMenu')" />
 			<prompt>
 				<audio fetchhint="prefetch" expr="app_audio_path + '5110.wav'">
@@ -77,6 +80,7 @@
 						<assign name="g_marker" expr="'M110-01'" />
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
+						<assign name="G_zip" expr="G_zip + 1" />
 						<goto next="cal008_200_OfficeLocation.vxml" />
 					<else />
 						<clear namelist="Response_field" />

@@ -8,7 +8,7 @@
  ============================= -->
 
 	<var name="repromptCount" expr="0" />
-	<var name="_repeat" expr="0" />
+	<var name="repeatCount" expr="0" />
 	
 	<form id="EntryLogging" cleardtmf="true">
 		<block>
@@ -71,7 +71,7 @@
 					</audio>
 				</prompt>		
 			</foreach>    
-			<if cond="_repeat &gt;= MAX_REPEAT &amp;&amp; G_zip &gt;= MAX_ZIP">
+			<if cond="repeatCount &gt;= MAX_REPEAT &amp;&amp; G_zip &gt;= MAX_ZIP">
 				<assign name="CHI_exit_type" expr="'E24040'" />
 				<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
 				<assign name="g_marker" expr="'M240-40'" />
@@ -95,7 +95,7 @@
 		</block>
 		<field name="Response_field" slot="answer">
 			<grammar type="application/x-abnf" mode="dtmf">1|2|3</grammar>
-			<prompt cond="_repeat &lt; MAX_REPEAT">
+			<prompt cond="repeatCount &lt; MAX_REPEAT">
 				<audio fetchhint="prefetch" expr="app_audio_path + '5246.wav'">
 					<voice name="jan">To repeat this information, press 1.</voice>
 				</audio>
@@ -132,11 +132,11 @@
 			<filled>
 				<var name="collectedResponse" expr="Response_field" />
 				<if cond="collectedResponse == '1'">
-					<if cond="_repeat &lt; MAX_REPEAT">
+					<if cond="repeatCount &lt; MAX_REPEAT">
 						<assign name="g_marker" expr="'M240-01'" />
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
-						<assign name="_repeat" expr="_repeat + 1" />	
+						<assign name="repeatCount" expr="repeatCount + 1" />	
 						<goto next="#Part_A" />					
 					<else />
 						<clear namelist="Response_field" />
@@ -159,8 +159,7 @@
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 						<assign name="G_zip" expr="G_zip + 1" />
-						<!-- TODO need to go to C in unit 200 -->
-						<goto next="cal008_200_OfficeLocation.vxml" />
+						<goto next="cal008_200_OfficeLocation.vxml#EntryLogging_C" />							
 					<else />
 						<clear namelist="Response_field" />
 						<throw event="nomatch" />

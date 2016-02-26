@@ -23,25 +23,6 @@
 		<block>
 			<assign name="formName" expr="'SelectResponse'" />
 		</block>
-<!--		
-		<field name="Response_field" type="digits?length=5" slot="answer">
-			<grammar type="application/x-abnf" mode="dtmf">
-				<rule id="keypress" scope = "public">
-			      <one-of>
-			          <item> 1 </item>
-			          <item> 2 </item>
-			          <item> 3 </item>
-			          <item> 4 </item>
-			          <item> 5 </item>
-			          <item> 6 </item>
-			          <item> 7 </item>
-			          <item> 8 </item>
-			          <item> 9 </item>
-			          <item> 0 </item>
-			      </one-of>
-			    </rule>			
-			</grammar>
--->
 		<field name="Response_field" slot="answer">
 			<grammar mode="dtmf" src="builtin:dtmf/digits?length=5"/>		
 			<prompt>
@@ -73,7 +54,9 @@
 					<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 					<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 					<assign name="g_enteredZipcode" expr="collectedResponse" />				   
-					<log>Caller entered g_enteredZipcode=<value expr="g_enteredZipcode"/></log>					
+					<log>Caller entered g_enteredZipcode=<value expr="g_enteredZipcode"/></log>		
+					<assign name="g_enteredZipcodePhrasesArray" expr="getZipcodePhrases(g_enteredZipcode)"/>   					
+					<log>Phrases to play back g_enteredZipcodePhrasesArray=<value expr="g_enteredZipcodePhrasesArray"/></log>				
 					<goto next="cal008_220_ConfirmZip.vxml" />					                                                           
 				<else/>   <!-- collectedResponse.length NOT 5 -->
 					<clear namelist="Response_field" />				

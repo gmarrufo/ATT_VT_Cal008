@@ -21,6 +21,7 @@
 	</form>
 		
 	<form id="SelectResponse" cleardtmf="true">
+		<var name = "i" expr="0" />   	
 		<block>
 			<assign name="formName" expr="'SelectResponse'" />
 		</block>
@@ -31,12 +32,14 @@
 					<voice name="jan">I got your zip code as ... </voice>
 				</audio>
 			</prompt>			
-			<!-- TODO temporarily coding ZIP play back as below, need fix -->		
-			<prompt>
-				<audio fetchhint="prefetch" expr="app_audio_path + '9999.wav'">
-					<voice name="jan"><value expr="g_enteredZipcode"/></voice>
-				</audio>
-			</prompt>							
+			<!-- Play back zipcode. -->		
+			<prompt>					
+				<foreach array="g_enteredZipcodePhrasesArray" item="zipDigit">
+					<audio fetchhint="prefetch" expr="app_audio_path + zipDigit.phrase_number + '.wav'">
+						<voice name="jan"><value expr="zipDigit.phrase_text"/></voice>
+					</audio>
+				</foreach>    
+			</prompt>		
 			<prompt>
 				<audio fetchhint="prefetch" expr="app_audio_path + '5013.wav'">
 					<voice name="jan">If this is correct, press 1. Otherwise press 2.</voice>

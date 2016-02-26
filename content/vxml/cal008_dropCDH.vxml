@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="cal008_root.vxml">
+
+<!-- ============================
+	 Filename: cal008_dropCDH.vxml
+	 Description: End call processing, drop CDH billing records.
+	 09/19/15 - Initial Version
+ ============================= -->
+
+	<!--################################################################ -->
+	<form id="GetHostName">
+		<block>
+			<assign name="vxmlFileName" expr="'cal008_dropCDH.vxml'" />		
+			<assign name="formName" expr="'GetHostName'"/>
+		</block>
+		<subdialog name="GetHost" method="post" src="/cal008/cal008_ServerDetails" fetchtimeout="10s">
+			<error>
+				<log>cal008.cal008_dropCDH.GetHostName.GetHost.error:<value expr="_event"/></log>
+				<script> rptSetSiteName('UNKNOWN');</script>
+				<goto next="#CDHBillingRequest"/>
+			</error>
+			<filled>
+				<log>cal008.cal008_dropCDH.GetHostName.GetHost.filled:HostName=<value expr="GetHost.Server"/>
+				</log>
+				<script> rptSetSiteName(GetHost.Server);</script>
+				<goto next="#CDHBillingRequest"/>
+			</filled>
+		</subdialog>
+	</form>
+	<!--################################################################ -->
+	<form id="CDHBillingRequest">
+		<block>
+			<assign name="formName" expr="'CDHBillingRequest'"/>
+			<script><![CDATA[
+               cdh_REPORT = buildReportSQL();
+           ]]></script>
+			<log>cal008.cal008_dropCDH.CDHBillingRequest: cdh_CALL_ID=<value expr="cdh_CALL_ID"/>,
+            CHI_exit_type=<value expr="CHI_exit_type"/>,
+            BillingString=<value expr="BillingString"/>,
+            MarkerStringWithCount=<value expr="MarkerStringWithCount"/>,
+            ZipLocsString=<value expr="ZipLocsString"/>,            
+            cdh_RECORD_TYPE=<value expr="cdh_RECORD_TYPE"/>,
+            cdh_START_TIME=<value expr="cdh_START_TIME"/>,
+            cdh_END_TIME=<value expr="cdh_END_TIME"/>,
+            cdh_ANI=<value expr="cdh_ANI"/>,
+            cdh_DNIS=<value expr="cdh_DNIS"/>,
+            cdh_REPORT=<value expr="cdh_REPORT"/>
+			</log>
+		</block>
+		<subdialog namelist="cdh_APPL_ID cdh_CALL_ID cdh_RECORD_TYPE cdh_START_TIME cdh_END_TIME cdh_ANI cdh_DNIS g_APPL_ROOT_DOC cdh_REPORT" method="post" name="CDHResponse" src="/PlatformCDH/PlatformCDHServlet" fetchtimeout="15s">
+			<filled>
+				<if cond="CDHResponse.status == 'state.success'">
+					<log>VOICETONESTDLOG.cal008.cal008_dropCDH.CDHBillingRequest:CAL008 APP END:CDH BILLING RECORD INSERTED</log>
+				<else/>
+					<log>VOICETONESTDLOG.cal008.cal008_dropCDH.CDHBillingRequest: ERROR DROPPING CDH BILLING RECORD</log>
+					<assign name="sevLevel" expr="'MAJOR'"/>
+					<assign name="application.alarmid" expr="'CAL008_CDH'"/>
+					<assign name="errorMessage" expr="'cal008.cal008_dropCDH.CDHBillingRequest.filled:UNABLE TO DROP BILLING RECORD:ErrorMessage=' + CDHResponse.status + ':g_RptBoxID=' + g_RptBoxID + ':REPORTQUERY=' + cdh_REPORT"/>
+					<goto next="#SendAlarm"/>
+				</if>
+			</filled>
+			<error>
+				<log>VOICETONESTDLOG.cal008.cal008_dropCDH.CDHBillingRequest: ERROR DROPPING CDH BILLING RECORD</log>
+				<assign name="sevLevel" expr="'MAJOR'"/>
+				<assign name="application.alarmid" expr="'CAL008_CDH'"/>
+				<assign name="errorMessage" expr="'cal008.cal008_dropCDH.CDHBillingRequest:AlarmDescription=UNABLE TO DROP BILLING RECORD:ErrorMessage=' + _event + ',' + _message + ':g_RptBoxID=' + g_RptBoxID + ':REPORTQUERY=' + cdh_REPORT"/>
+				<goto next="#SendAlarm"/>
+			</error>
+		</subdialog>
+	</form>
+	<!--################################################################ -->
+	<form id="SendAlarm">
+		<subdialog name="GenAlarm" src="/PlatServlets/GenAlarm" namelist="appid sevLevel errorMessage alarmid">
+			<filled>
+				<log>VOICETONESTDLOG.cal008.cal008_dropCDH.SentAlarm: Alarm=<value expr="errorMessage"/></log>
+			</filled>
+			<error>
+				<log>VOICETONESTDLOG.cal008.cal008_dropCDH.SendAlarm: ERROR GENERATING ALARM: Alarm=<value expr="errorMessage"/>
+				</log>
+			</error>
+		</subdialog>
+	</form>
+		
+</vxml>

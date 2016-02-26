@@ -18,6 +18,11 @@
         <assign name="g_marker" expr="'M100-00'"/>              
         <assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)"/>
         <log>cal008 - REPORT_MARKER= <value expr="g_marker"/></log>   
+        
+        <script><![CDATA[
+            startBillingTransactionA();  // start A
+        ]]></script>
+                
         <log level="0" expr="moduleStart('MS-CallStart')"/>                                             
         <prompt>
             <audio fetchhint="prefetch" expr="app_audio_path + '5101.wav'">

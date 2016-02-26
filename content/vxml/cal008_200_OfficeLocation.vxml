@@ -11,9 +11,17 @@
 
 	<form id="EntryLogging" cleardtmf="true">
 		<block>
+			<script><![CDATA[
+				startBillingTransactionB();   // end previous transaction then start B
+			]]></script>			
+			<goto next="#EntryLogging_C" />
+		</block>
+	</form>
+	
+	<form id="EntryLogging_C" cleardtmf="true">
+		<block>
 			<assign name="vxmlFileName" expr="'cal008_200_OfficeLocation.vxml'" />
-			<assign name="formName" expr="'EntryLogging'" />
-			<assign name="transactionID" expr="'B'" />
+			<assign name="formName" expr="'EntryLogging_C'" />							
 			<assign name="g_marker" expr="'M200-00'" />
 			<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 			<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
@@ -26,6 +34,7 @@
 			<goto next="#SelectResponse" />
 		</block>
 	</form>
+	
 	<form id="SelectResponse" cleardtmf="true">
 		<block>
 			<assign name="formName" expr="'SelectResponse'" />
@@ -77,7 +86,10 @@
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
 						<assign name="G_main" expr="G_main + 1" />
-						<assign name="transactionID" expr="'A'" />
+						<assign name="G_zip" expr="G_zip - 1" />
+						<script><![CDATA[
+							startBillingTransactionA();  // end previous transaction then start A
+						]]></script>
 						<goto next="cal008_110_MainMenu.vxml" />
 					<else />
 						<clear namelist="Response_field" />

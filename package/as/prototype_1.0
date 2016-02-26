@@ -1,0 +1,31 @@
+#ident "@(#)@(#) prototype 559.1.2.3 09/20/10 12:20:29@(#)"
+i pkginfo
+i postinstall
+i i.fsu
+
+#FSU provisioning
+d none /usr/local/wevs/cal008 0755 wevs wevs
+
+#AUDIO provisioning
+d none /usr/local/www/audio/cal008 0755 wevs wevs
+d none /usr/local/www/audio/cal008/english 0755 wevs wevs
+d none /usr/local/www/audio/cal008/spanish 0755 wevs wevs
+d none /usr/local/www/audio/cal008/vietnamese 0755 wevs wevs
+d none /usr/local/www/audio/cal008/cantonese 0755 wevs wevs
+d none /usr/local/www/audio/cal008/hmong 0755 wevs wevs
+
+#English FSU phrases
+#f fsu /usr/local/www/audio/cal008/english/5000.wav=../../audio/english/5000.wav 0644 wevs wevs
+
+#Spanish FSU phrases
+#f fsu /usr/local/www/audio/cal008/spanish/5000.wav=../../audio/spanish/5000.wav 0644 wevs wevs
+
+#Vietnamese FSU phrases
+#f fsu /usr/local/www/audio/cal008/vietnamese/5000.wav=../../audio/vietnamese/5000.wav 0644 wevs wevs
+
+#Cantonese FSU phrases
+#f fsu /usr/local/www/audio/cal008/cantonese/5000.wav=../../audio/cantonese/5000.wav 0644 wevs wevs
+
+#Hmong FSU phrases
+#f fsu /usr/local/www/audio/cal008/hmong/5000.wav=../../audio/hmong/5000.wav 0644 wevs wevs
+

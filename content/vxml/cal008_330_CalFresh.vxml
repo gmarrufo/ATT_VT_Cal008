@@ -8,7 +8,7 @@
  ============================= -->
 
 	<var name="repromptCount" expr="0" />
-	<var name="_repeat" expr="0" />
+	<var name="repeatCount" expr="0" />
 
 	<form id="EntryLogging" cleardtmf="true">
 		<block>
@@ -31,7 +31,7 @@
 					<voice name="jan">Cal Fresh Program. The Cal Fresh Program adds to your food budget by putting more healthy and nutritious foods on the table. The program issues monthly electronic benefits that can be used to buy most foods at many markets and food stores. For more information about the Cal Fresh Program or where to apply in your county, please call 1-877-847-3663, visit www.calfresh.ca.gov that's w-w-w- dot - c-a-l-f-r-e-s-h-dot-c-a-dot -g-o-v, or apply online at www.benefitscal.com. (note: Spanish: , the phone number should be 1-888-9-COMIDA or (1-888-926-6432))</voice>
 				</audio>
 			</prompt>			
-			<if cond="_repeat &gt;= MAX_REPEAT &amp;&amp; G_food &gt;= MAX_FOOD">
+			<if cond="repeatCount &gt;= MAX_REPEAT &amp;&amp; G_food &gt;= MAX_FOOD">
 				<assign name="CHI_exit_type" expr="'E33040'" />
 				<log>cal008 - CHI_exit_type=<value expr="CHI_exit_type" /></log>
 				<assign name="g_marker" expr="'M330-40'" />
@@ -55,7 +55,7 @@
 		</block>
 		<field name="Response_field" slot="answer">
 			<grammar type="application/x-abnf" mode="dtmf">1|2</grammar>		
-			<prompt cond="_repeat &lt; MAX_REPEAT">
+			<prompt cond="repeatCount &lt; MAX_REPEAT">
 				<audio fetchhint="prefetch" expr="app_audio_path + '5331.wav'">
 					<voice name="jan">To repeat this message, press 1.</voice>
 				</audio>
@@ -92,11 +92,11 @@
 			<filled>
 				<var name="collectedResponse" expr="Response_field" />
 				<if cond="collectedResponse == '1'">
-					<if cond="_repeat &lt; MAX_REPEAT">
+					<if cond="repeatCount &lt; MAX_REPEAT">
 						<assign name="g_marker" expr="'M330-01'" />
 						<assign name="g_markerString" expr="pegMarker(g_markerString, g_marker)" />
 						<log>cal008 - REPORT_MARKER=<value expr="g_marker" /></log>
-						<assign name="_repeat" expr="_repeat + 1" />
+						<assign name="repeatCount" expr="repeatCount + 1" />
 						<goto next="#Part_A" />
 					<else />
 						<clear namelist="Response_field" />
